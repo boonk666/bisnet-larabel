@@ -25,3 +25,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/customers/get-all', [CustomerController::class, 'getAll'])->name('customers.get-all');
 Route::get('/payments/per-customer-for-current-month', [PaymentController::class, 'perCustomerForCurrentMonth'])->name('payments.per-customer-for-current-month');
 Route::get('/complaints/get-all', [ComplaintController::class, 'getAll'])->name('complaints.get-all');
+
+Route::get('/payments/bank', [PaymentController::class, 'bank']);
