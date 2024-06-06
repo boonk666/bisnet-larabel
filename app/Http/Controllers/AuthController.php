@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Support\Facades\Auth;
-
+use App\Models\User;
 class AuthController extends Controller
 {
         
@@ -16,15 +16,25 @@ class AuthController extends Controller
      * @return void
      */
     public function login(LoginRequest $request) {
-        if (Auth::attempt($request->validated())) {
+        $user=User::whereUsername($request->input('username'))->first();
+if (!$user){
+    return back()->withErrors([
+        'username' => 'username yang anda masukkan salah'
+    ])->onlyInput('username');
+}
+if (!\Hash::check($request->input('password'), $user->password)){
+    return back()->withErrors([
+        'username' => 'username yang anda masukkan salah'
+    ])->onlyInput('username');
+}
+     
             $request->session()->regenerate();
+            Auth::login($user);
 
             return redirect()->route('customer.index');
-        }
         
-        return back()->withErrors([
-            'email' => 'Kombinasi email dan password tidak ditemukan'
-        ])->onlyInput('email');
+        
+       
     }
     
 }

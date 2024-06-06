@@ -41,11 +41,11 @@
                             <form action="{{ route('login') }}" method="POST" class="user">
                                 @csrf
                                 <div class="form-group">
-                                    <input type="email" class="form-control form-control-user @if ($errors->has('email')) is-invalid @endif)"
+                                    <input type="text" class="form-control form-control-user @if ($errors->has('username')) is-invalid @endif)"
                                         id="exampleInputEmail" aria-describedby="emailHelp"
-                                        placeholder="Enter Email Address..." name="email" value="{{ old('email') }}">
-                                    @if ($errors->has('email'))
-                                        <p class="invalid-feedback">{{ $errors->first('email') }}</p>
+                                        placeholder="Enter Email Address..." name="username" value="{{ old('username') }}">
+                                    @if ($errors->has('username'))
+                                        <p class="invalid-feedback">{{ $errors->first('username') }}</p>
                                     @endif
                                 </div>
                                 <div class="form-group">

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\ComplaintController;
+use App\Http\Controllers\Api\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,3 +28,4 @@ Route::get('/payments/per-customer-for-current-month', [PaymentController::class
 Route::get('/complaints/get-all', [ComplaintController::class, 'getAll'])->name('complaints.get-all');
 
 Route::get('/payments/bank', [PaymentController::class, 'bank']);
+Route::post('/login',[LoginController::class,'login']);
