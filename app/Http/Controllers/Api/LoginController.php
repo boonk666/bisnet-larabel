@@ -18,10 +18,13 @@ class LoginController extends Controller
         if (!\Hash::check($request->input('password'), $user->password)){
             return response()->json(['message' => 'password yang anda masukkan salah'], 401);
         }
+
+        $pelanggan = $user->customer;
                 
         return response()->json([
             'token'=>$user->createToken('auth')->plainTextToken,
-            'id_pelanggan' => $user->customer->id_pelanggan
+            'id_pelanggan' => $pelanggan->id_pelanggan,
+            'nama_pelanggan' => $pelanggan->nama
         ]);
     }
 
