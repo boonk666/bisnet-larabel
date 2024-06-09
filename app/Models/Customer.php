@@ -28,7 +28,7 @@ class Customer extends Model
      *
      * @var array
      */
-    protected $fillable = ['nama', 'no_telp'];
+    protected $fillable = ['nama', 'no_telp', 'id_pengguna'];
     
     /**
      * payment
@@ -59,5 +59,14 @@ class Customer extends Model
         $query->whereDoesntHave('payment', function ($query) {
             $query->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()]);
         });
+    }
+    
+    /**
+     * user
+     *
+     * @return void
+     */
+    public function user() {
+        return $this->belongsTo(User::class, 'id_pengguna');
     }
 }
