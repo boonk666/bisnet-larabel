@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\ComplaintController;
 use App\Http\Controllers\Api\LoginController;
+use App\Http\Controllers\Api\KeluhanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,3 +30,4 @@ Route::get('/complaints/get-all', [ComplaintController::class, 'getAll'])->name(
 
 Route::get('/payments/bank', [PaymentController::class, 'bank']);
 Route::post('/login',[LoginController::class,'login']);
+Route::post('/keluhan',[KeluhanController::class,'submit'])->middleware('auth:sanctum');
