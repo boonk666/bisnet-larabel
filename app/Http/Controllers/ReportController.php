@@ -12,7 +12,7 @@ class ReportController extends Controller
         $total_payment = Payment::count();
 
         return view('report.index', [
-            'income' => $total_payment * 30000
+            'income' => $total_payment * 85000
         ]);
     }
 
