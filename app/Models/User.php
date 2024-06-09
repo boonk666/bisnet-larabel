@@ -34,6 +34,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'nama',
+        'username',
         'email',
         'password',
         'username'
@@ -67,5 +68,14 @@ class User extends Authenticatable
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = Hash::make($value);
+    }
+    
+    /**
+     * customer
+     *
+     * @return void
+     */
+    public function customer() {
+        return $this->hasOne(Customer::class, 'id_pengguna');
     }
 }
