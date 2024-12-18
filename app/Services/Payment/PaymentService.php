@@ -24,10 +24,10 @@ class PaymentService {
                 'reusability' => 'ONE_TIME_USE',
                 'reference_id' => 'example-1234',
                 'virtual_account' => [
-                'channel_code' => 'BNI',
+                'channel_code' => 'BCA',
                 'channel_properties' => [
                     'customer_name' => 'Ahmad Gunawan',
-                    'expires_at' => '2024-06-13T17:00:00Z'
+                    'expires_at' => now()->addDays(1)
                 ]
                 ]
             ],
