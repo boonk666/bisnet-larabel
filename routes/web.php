@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MidtransController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +20,7 @@ use App\Http\Controllers\AuthController;
 
 Route::middleware('auth')
     ->group(function () {
+        Route::name('logout') -> get('/logout',[AuthController::class,'logout']);
         Route::name('customer.')
             ->group(function () {
                 Route::view('/', 'customer.index')
@@ -38,3 +40,8 @@ Route::middleware('guest')
         Route::view('/login', 'login')->name('login');
         Route::post('/login', [AuthController::class, 'login'])->name('login');
     });
+
+Route::post('/midtrans/callback', [MidtransController::class, 'callback'])->name('midtrans.callback');
+Route::get('/midtrans/callback', function () {
+    return 'ok';
+});
