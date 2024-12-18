@@ -36,5 +36,9 @@ if (!\Hash::check($request->input('password'), $user->password)){
         
        
     }
-    
+public function logout (){
+    Auth::logout();
+    return redirect()->route('login');
+}    
 }
+
