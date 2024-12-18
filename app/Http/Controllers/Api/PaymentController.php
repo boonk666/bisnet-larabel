@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Http\Requests\Payment\GetPerCustomerForCurrentMonthRequest;
-use App\Http\Requests\Api\Payment\CreatePaymentRequest;
-use DataTables;
-use App\Services\Payment\PaymentService;
+use App\Models\Payment;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\DataTables;
+use Illuminate\Support\Str;
+use Midtrans\Snap;
 
 class PaymentController extends Controller
 {
@@ -30,19 +33,47 @@ class PaymentController extends Controller
 
         return Datatables::of($customerQuery)->toJson();
     }
-    
-    /**
-     * bank
-     *
-     * @return void
-     */
-    public function bank(PaymentService $paymentService) {
-        $va = $paymentService->bank();
 
-        return [
-            'amount' => $va['amount'],
-            'account_number' => $va['channel_properties']['virtual_account_number']
-        ];
+    public function submit(Request $request) {
+        $user = $request->user();
+        $customer = Customer::firstWhere('id_pengguna', $user->id_pengguna);
+
+        $payment = $customer->payments()->first();
+
+        if ($payment) {
+            return $payment;
+        }
+
+        return DB::transaction(function () use ($user, $customer) {
+            $code = Str::random(8);
+
+            $snap = Snap::createTransaction([
+                'transaction_details' => [
+                    'order_id' => $code,
+                    'gross_amount' => 85000
+                ],
+                'customer_details' => [
+                    'first_name' => $customer->nama,
+                    'phone' => $customer->no_telp
+                ],
+                'item_details' => [
+                    [
+                        'id' => 'paket1',
+                        'price' => 85000,
+                        'quantity' => 1,
+                        'name' => 'Paket 1'
+                    ]
+                ]
+            ]);
+
+            $payment = Payment::create([
+                'kode_pembayaran' => $code,
+                'id_pelanggan' => $customer->id_pelanggan,
+                'snap_url' => $snap->redirect_url
+            ]);
+    
+            return $payment;
+        });
     }
 
 }
