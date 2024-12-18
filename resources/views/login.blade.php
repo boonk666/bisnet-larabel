@@ -36,7 +36,7 @@
                     <div class="card-body p-0">
                         <div class="p-5">
                             <div class="text-center">
-                                <h1 class="h4 text-gray-900 mb-4">Login</h1>
+                                <h1 class="h4 text-gray-900 mb-4">BSI.NET</h1>
                             </div>
                             <form action="{{ route('login') }}" method="POST" class="user">
                                 @csrf
