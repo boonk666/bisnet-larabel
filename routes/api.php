@@ -28,6 +28,10 @@ Route::get('/customers/get-all', [CustomerController::class, 'getAll'])->name('c
 Route::get('/payments/per-customer-for-current-month', [PaymentController::class, 'perCustomerForCurrentMonth'])->name('payments.per-customer-for-current-month');
 Route::get('/complaints/get-all', [ComplaintController::class, 'getAll'])->name('complaints.get-all');
 
-Route::get('/payments/bank', [PaymentController::class, 'bank']);
 Route::post('/login',[LoginController::class,'login']);
-Route::post('/keluhan',[KeluhanController::class,'submit'])->middleware('auth:sanctum');
+
+Route::middleware('auth:sanctum')
+    ->group(function () {
+        Route::post('/payments', [PaymentController::class, 'submit']);
+        Route::post('/keluhan',[KeluhanController::class,'submit']);
+    });
