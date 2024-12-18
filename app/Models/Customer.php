@@ -31,11 +31,11 @@ class Customer extends Model
     protected $fillable = ['nama', 'no_telp', 'id_pengguna'];
     
     /**
-     * payment
+     * payments
      *
      * @return void
      */
-    public function payment() {
+    public function payments() {
         return $this->hasMany(Payment::class, 'id_pelanggan');
     }
     
@@ -45,8 +45,10 @@ class Customer extends Model
      * @return void
      */
     public function scopeIsPaidForCurrentMonth($query) {
-        $query->whereHas('payment', function ($query) {
-            $query->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()]);
+        $query->whereHas('payments', function ($query) {
+            $query
+                ->where('status', 'success')
+                ->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()]);
         });
     }
     
@@ -56,8 +58,10 @@ class Customer extends Model
      * @return void
      */
     public function scopeIsNotPaidForCurrentMonth($query) {
-        $query->whereDoesntHave('payment', function ($query) {
-            $query->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()]);
+        $query->whereDoesntHave('payments', function ($query) {
+            $query
+                ->where('status', 'success')
+                ->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()]);
         });
     }
     
