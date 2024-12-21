@@ -44,11 +44,14 @@ class Customer extends Model
      *
      * @return void
      */
-    public function scopeIsPaidForCurrentMonth($query) {
-        $query->whereHas('payments', function ($query) {
+    public function scopeIsPaidForCurrentMonth($query, $month) {
+        $query->whereHas('payments', function ($query) use ($month) {
+            $startAt = now()->setMonth($month)->startOfMonth();
+            $endAt = now()->setMonth($month)->endOfMonth();
+
             $query
                 ->where('status', 'success')
-                ->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()]);
+                ->whereBetween('created_at', [$startAt, $endAt]);
         });
     }
     
@@ -57,11 +60,14 @@ class Customer extends Model
      *
      * @return void
      */
-    public function scopeIsNotPaidForCurrentMonth($query) {
-        $query->whereDoesntHave('payments', function ($query) {
+    public function scopeIsNotPaidForCurrentMonth($query, $month) {
+        $query->whereDoesntHave('payments', function ($query) use ($month) {
+            $startAt = now()->setMonth($month)->startOfMonth();
+            $endAt = now()->setMonth($month)->endOfMonth();
+
             $query
                 ->where('status', 'success')
-                ->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()]);
+                ->whereBetween('created_at', [$startAt, $endAt]);
         });
     }
     

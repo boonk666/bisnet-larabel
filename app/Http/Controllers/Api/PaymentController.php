@@ -21,14 +21,23 @@ class PaymentController extends Controller
      * @return void
      */
     public function perCustomerForCurrentMonth(GetPerCustomerForCurrentMonthRequest $request) {
-        $customerQuery = Customer::when($request->has('is_paid'), function ($query) use ($request) {
+        $month = $request->input('month');
+
+        $customerQuery = Customer::when($request->has('is_paid'), function ($query) use ($request, $month) {
             $isPaid = $request->get('is_paid');
             
             if ($isPaid) {
-                $query->isPaidForCurrentMonth();
+                $query->isPaidForCurrentMonth($month);
             } else {
-                $query->isNotPaidForCurrentMonth();
+                $query->isNotPaidForCurrentMonth($month);
             }
+        })->with('payments', function ($query) use ($month) {
+            $startAt = now()->setMonth($month)->startOfMonth();
+            $endAt = now()->setMonth($month)->endOfMonth();
+
+            $query
+                ->where('status', 'success')
+                ->whereBetween('created_at', [$startAt, $endAt]);
         });
 
         return Datatables::of($customerQuery)->toJson();
