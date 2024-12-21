@@ -85,4 +85,14 @@ class PaymentController extends Controller
         });
     }
 
+    public function getMonthly(Request $request) {
+        $user = $request->user();
+        $customer = Customer::firstWhere('id_pengguna', $user->id_pengguna);
+
+        return $customer->payments()
+            ->where('status', 'success')
+            ->whereBetween('created_at', [now()->startOf('year'), now()->endOf('year')])
+            ->get();
+    }
+
 }

@@ -33,5 +33,6 @@ Route::post('/login',[LoginController::class,'login']);
 Route::middleware('auth:sanctum')
     ->group(function () {
         Route::post('/payments', [PaymentController::class, 'submit']);
+        Route::get('/get-monthly', [PaymentController::class, 'getMonthly']);
         Route::post('/keluhan',[KeluhanController::class,'submit']);
     });
